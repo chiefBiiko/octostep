@@ -1,12 +1,7 @@
-# octostep3
-
-# convenience helper
-any.null <- function(...) {
-  any(sapply(list(...), function(arg) is.null(arg)))
-}
+# octostep
 
 # main
-octostep3 <- function(x, func, pad=1L) {
+octostep <- function(x, func, pad=1L) {
   stopifnot(length(x) >= 2L * pad + 1L, is.function(func), 
             length(formals(func)) == 2L * pad + 1L)
   y <- vector('list', length(x))  # preallocate return
@@ -35,10 +30,13 @@ octostep3 <- function(x, func, pad=1L) {
 }
 
 # xample
-octo <- octostep3(as.list(1L:5L), function(pre1, pre2, cur, nxt1, nxt2) {
-  if (any.null(pre1, pre2, nxt1, nxt2)) {
-    NULL
-  } else {
-    sum(pre1, pre2, cur, nxt1, nxt2)
-  }
-}, 2L)
+octo <- octostep(as.list(1L:5L), function(pre, cur, nxt) {
+  c(pre=if (is.null(pre)) NA else pre, 
+    cur=cur, 
+    nxt=if (is.null(nxt)) NA else nxt)
+})
+
+# convenience helper
+any.null <- function(...) {
+  any(sapply(list(...), function(arg) is.null(arg)))
+}
