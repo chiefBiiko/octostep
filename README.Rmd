@@ -1,0 +1,21 @@
+---
+title: "octostep"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source('octostep4.R')
+```
+
+Iterate lists getting a *window* argument list to your callback.
+
+## API
+
+`octostep::octostep(x, func, pad, use.names, transform.previous)`
+
+
+
+```{r}
+1L
+```
