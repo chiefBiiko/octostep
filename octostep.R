@@ -63,40 +63,7 @@ any.null <- function(...) {
 }
 
 #' @rdname any.null
+#' @export
 all.null <- function(...) {
   return(all(sapply(list(...), function(arg) is.null(arg))))
 }
-
-##############################################################################
-
-# examples
-
-# input
-cable <- list(a=1, b=2, z=3, d=4, u=5)
-
-# see arguments evolve
-octo <- octostep(as.list(1L:5L), function(pre, cur, nxt) {
-  c(pre=if (is.null(pre)) NA else pre, 
-    cur=cur, 
-    nxt=if (is.null(nxt)) NA else nxt)
-})
-
-# increase padding
-paddle <- octostep(as.list(1L:9L), function(pre1, pre2, cur, nxt1, nxt2) {
-  c(pre1=if (is.null(pre1)) NA else pre1, 
-    pre2=if (is.null(pre2)) NA else pre2, 
-    cur=cur, 
-    nxt1=if (is.null(nxt1)) NA else nxt1,
-    nxt2=if (is.null(nxt2)) NA else nxt2)
-}, pad=2L)
-
-# iterate with default options
-mule <- octostep(cable, function(pre, cur, nxt) {
-  if (!any.null(pre, nxt)) sum(pre, cur, nxt) else cur
-}, pad=1L, use.names=TRUE, transform.previous=FALSE)  # all defaults
-
-# transform previous items while iterating
-mutant <- octostep(cable, function(pre, cur, nxt) {
-  if (!any.null(pre, nxt)) sum(pre, cur, nxt) else cur
-}, pad=1L, use.names=TRUE, transform.previous=TRUE)
-
