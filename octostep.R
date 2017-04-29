@@ -14,7 +14,7 @@
 #' @param use.names If \code{x} has a \code{names} attribute, should it be 
 #' used for the return value? \strong{optional}.
 #' @param transform.previous Should the \code{previous} arguments of the 
-#' callback take the values of the callback rather than the plain
+#' callback take the values of previous callbacks rather than the plain
 #' values of the initial input list \strong{optional}.
 #' @return List.
 #'
