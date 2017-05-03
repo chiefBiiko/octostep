@@ -14,8 +14,8 @@ octostep(x, func,  # x and func are required
 ```
 
 -   `x` List. **required**
--   `func` Function with arity `2L * pad + 1L`. **required**
--   `pad` Integer controlling the number of items to be padded around the current item, must be within `1L:((length(x) - 1L) / 2L)`. **optional**
+-   `func` Function with arity `2L * pad + 1L`. **required**
+-   `pad` Integer controlling the number of items to be padded *around* (on each side of) the current item, must be within `1L:((length(x) - 1L) / 2L)`. **optional**
 -   `use.names` Copy names? **optional**
 -   `transform.previous` Should the previous arguments of the callback take the values of previous callbacks rather than the plain values of the initial input list? **optional**
 
