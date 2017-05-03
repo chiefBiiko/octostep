@@ -3,8 +3,6 @@ octostep
 
 Iterate lists getting a *window* argument list to your callback.
 
-------------------------------------------------------------------------
-
 API
 ---
 
@@ -22,8 +20,6 @@ octostep(x, func,  # x and func are required
 **Return**
 
 List.
-
-------------------------------------------------------------------------
 
 Examples
 --------
