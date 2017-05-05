@@ -5,7 +5,7 @@
 #' Besides a list \code{octostep} takes a function as input, 
 #' applies it to each element of the list and returns the resulting list.
 #' 
-#' @param x List \strong{required}
+#' @param x List, must conform to \code{length(x) >= 3L} \strong{required}.
 #' @param func Function with \code{length(formals(func))} == 
 #' \code{2L * pad + 1L} \strong{required}.
 #' @param pad Integer controlling how many items should be padded \emph{around} 

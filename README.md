@@ -11,13 +11,13 @@ octostep(x, func,  # x and func are required
          pad=1L, use.names=TRUE, transform.previous=FALSE)
 ```
 
--   `x` List. **required**
+-   `x` List, must conform to `length(x) >= 3L`. **required**
 -   `func` Function with arity `2L * pad + 1L`. **required**
 -   `pad` Integer controlling the number of items to be padded *around* (on each side of) the current item, must be within `1L:((length(x) - 1L) / 2L)`. **optional**
 -   `use.names` Copy names? **optional**
--   `transform.previous` Should the previous arguments of the callback take the values of previous callbacks rather than the plain values of the initial input list? **optional**
+-   `transform.previous` Should the previous arguments to `func` hold the values of previous callbacks rather than the plain values of the initial input list? **optional**
 
-**Return**
+#### Return
 
 List.
 
@@ -82,7 +82,7 @@ print(paddle)
 
 ``` r
 # new input
-cable <- list(a=1, b=2, z=3, d=4, u=5)
+cable <- list(m=0L, o=0L, n=4L, e=1L, y=9L)
 
 # iterate and map with default options
 mule <- octostep(cable, function(pre, cur, nxt) {
@@ -92,20 +92,20 @@ mule <- octostep(cable, function(pre, cur, nxt) {
 print(mule)
 ```
 
-    $a
-    [1] 1
+    $m
+    [1] 0
 
-    $b
-    [1] 6
+    $o
+    [1] 4
 
-    $z
-    [1] 9
-
-    $d
-    [1] 12
-
-    $u
+    $n
     [1] 5
+
+    $e
+    [1] 14
+
+    $y
+    [1] 9
 
 ``` r
 # transform previous items while iterating
@@ -116,17 +116,17 @@ mutant <- octostep(cable, function(pre, cur, nxt) {
 print(mutant)
 ```
 
-    $a
-    [1] 1
+    $m
+    [1] 0
 
-    $b
-    [1] 6
+    $o
+    [1] 4
 
-    $z
-    [1] 13
+    $n
+    [1] 9
 
-    $d
-    [1] 22
+    $e
+    [1] 19
 
-    $u
-    [1] 5
+    $y
+    [1] 9
