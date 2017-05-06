@@ -17,7 +17,7 @@ octostep(x, func,  # x and func are required
 -   `use.names` Copy names? **optional**
 -   `transform.previous` Should the previous arguments to `func` hold the values of previous callbacks rather than the plain values of the initial input list? **optional**
 
-#### Return
+### Return
 
 List.
 
