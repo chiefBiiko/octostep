@@ -18,6 +18,8 @@
 #' values of the initial input list \strong{optional}.
 #' @return List.
 #'
+#' @seealso \code{\link{reduceList}}
+#'
 #' @export
 octostep <- function(x, func, 
                      pad=1L, use.names=TRUE, transform.previous=FALSE) {
