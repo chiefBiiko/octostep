@@ -33,13 +33,13 @@ reduceList <- function(x, func,
     stop('Set allow.ragged to TRUE to iterate lists of unequal length')
   }
   # preallocate return
-  y <- vector('list', maxl <- length(x[[which.max(sapply(x, length))]]))
+  y <- vector('list', maxl <- max(sapply(x, length)))
   # naming
   if (is.numeric(which.names)) {
     names(y) <- names(x[[which.names]]) 
     if (warn && anyNA(names(y))) warning('Return value has missing names')
   }
-  # iterate
+  # setup iteration
   if (from == 'left') {
     i <- 1L
     crem <- +1L
@@ -47,6 +47,7 @@ reduceList <- function(x, func,
     i <- maxl
     crem <- -1L
   }
+  # iterate
   repeat {
     # build argument list for current iteration/callback
     z <- lapply(x, function(xx) if (i %in% 1L:length(xx)) xx[[i]])
