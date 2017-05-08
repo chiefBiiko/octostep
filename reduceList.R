@@ -5,9 +5,9 @@
 #' @param x List of lists \strong{required}.
 #' @param func Function with arity \code{length(x)} \strong{required}.
 #' @param which.names Integer index of the list in \code{x} from which to copy 
-#' names, default \code{NULL} indicates not to copy names \strong{optional}.
-#' @param from Whether to reduce from left or right, defaults to \code{'left'} 
-#' \strong{optional}.
+#' names, default \code{NULL} indicates not to copy any names \strong{optional}.
+#' @param from Whether to reduce from left or right, defaults to \code{'left'},
+#' alternative \code{'right'} \strong{optional}.
 #' @param allow.ragged Whether to allow input lists of unequal length, 
 #' defaults to \code{FALSE} \strong{optional}.
 #' @param warn Logical indicating whether to signal a warning if the name 
@@ -15,19 +15,30 @@
 #' the longest list of \code{x} \strong{optional}.
 #' @return List.
 #' 
+#' @details If the input lists are of unequal length an error is thrown unless
+#' \code{allow.ragged} is set to \code{TRUE}. The warn parameter is only of 
+#' relevance when \code{x} is ragged (input lists are of unequal length). In 
+#' such a case just make sure the name vector referenced via \code{which.names}
+#' has the same length as the longest list of \code{x}. Each iteration 
+#' \code{func} is called with the current items of \eqn{x[1...n]} as arguments. 
+#' If \code{x} is ragged missing values for current items are represented by 
+#' \code{NULL}.
+#' 
 #' @seealso \code{\link{octostep}}
 #' 
 #' @export
 reduceList <- function(x, func, 
                        which.names=NULL, 
                        from=c('left', 'right')[1],
-                       allow.ragged=FALSE, warn=TRUE) {
+                       allow.ragged=FALSE, 
+                       warn=if (allow.ragged) TRUE else FALSE) {
   stopifnot(is.list(x), length(x) > 1L, 
             all(sapply(x, function(xx) length(xx) > 0L)), 
             is.function(func), length(formals(func)) == length(x),
             is.null(which.names) || which.names %in% 1L:length(x), 
             from %in% c('left', 'right'), 
-            is.logical(allow.ragged))
+            is.logical(allow.ragged), 
+            is.logical(warn))
   if (!allow.ragged && 
       !all(sapply(x, function(xx) length(xx) == length(x[[1]])))) {
     stop('Set allow.ragged to TRUE to iterate lists of unequal length')
