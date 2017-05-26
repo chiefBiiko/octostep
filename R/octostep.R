@@ -23,7 +23,7 @@
 #' @export
 octostep <- function(x, func, 
                      pad=1L, use.names=TRUE, transform.previous=FALSE) {
-  stopifnot(pad >= 1L, length(x) >= 2L * pad + 1L, 
+  stopifnot(pad >= 1L,  # length(x) >= 2L * pad + 1L 
             is.function(func), length(formals(func)) == 2L * pad + 1L)
   y <- vector('list', length(x))  # preallocate return
   if (use.names) names(y) <- names(x)
