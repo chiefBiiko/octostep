@@ -1,14 +1,18 @@
 octostep
 ================
 
-Iterate lists getting a *window* argument list to your callback.
+Iterate or reduce lists getting a *window* argument list to your callback.
 
-API
----
+*[octostep](#octostep)*
+
+*[reduceList](#reducelist)*
+
+octostep
+--------
 
 ``` r
-octostep(x, func,  # x and func are required
-         pad=1L, use.names=TRUE, transform.previous=FALSE)
+octostep::octostep(x, func,  # x and func are required
+                   pad=1L, use.names=TRUE, transform.previous=FALSE)
 ```
 
 -   `x` List **required**
@@ -26,7 +30,7 @@ Examples
 
 ``` r
 # see arguments evolve
-octo <- octostep(as.list(1L:3L), function(pre, cur, nxt) {
+octo <- octostep::octostep(as.list(1L:3L), function(pre, cur, nxt) {
   c(pre=if (is.null(pre)) NA else pre, 
     cur=cur, 
     nxt=if (is.null(nxt)) NA else nxt)
@@ -49,13 +53,14 @@ print(octo)
 
 ``` r
 # increased padding
-paddle <- octostep(as.list(1L:5L), function(pre1, pre2, cur, nxt1, nxt2) {
-  c(pre1=if (is.null(pre1)) NA else pre1, 
-    pre2=if (is.null(pre2)) NA else pre2, 
-    cur=cur, 
-    nxt1=if (is.null(nxt1)) NA else nxt1,
-    nxt2=if (is.null(nxt2)) NA else nxt2)
-}, pad=2L)
+paddle <- octostep::octostep(as.list(1L:5L), 
+                             function(pre1, pre2, cur, nxt1, nxt2) {
+                               c(pre1=if (is.null(pre1)) NA else pre1, 
+                                 pre2=if (is.null(pre2)) NA else pre2, 
+                                 cur=cur, 
+                                 nxt1=if (is.null(nxt1)) NA else nxt1,
+                                 nxt2=if (is.null(nxt2)) NA else nxt2)
+                             }, pad=2L)
 
 print(paddle)
 ```
@@ -81,52 +86,100 @@ print(paddle)
        3    4    5   NA   NA 
 
 ``` r
-# new input
-cable <- list(m=0L, o=0L, n=4L, e=1L, y=9L)
+# cool input
+fable <- list(x=4L, y=1L, z=9L, a=0L, b=0L)
 
-# iterate and map with default options
-mule <- octostep(cable, function(pre, cur, nxt) {
-  if (!any.null(pre, nxt)) sum(pre, cur, nxt) else cur
-}, pad=1L, use.names=TRUE, transform.previous=FALSE)  # all defaults
+# transform previous items while iterating
+transformer <- octostep::octostep(fable, function(pre, cur, nxt) {
+  if (!octostep::any.null(pre, nxt)) sum(pre, cur, nxt) else cur
+}, pad=1L, use.names=TRUE, transform.previous=TRUE)  # transformers
 
-print(mule)
+print(transformer)
 ```
 
-    $m
-    [1] 0
-
-    $o
+    $x
     [1] 4
 
-    $n
-    [1] 5
-
-    $e
+    $y
     [1] 14
 
-    $y
-    [1] 9
+    $z
+    [1] 23
 
-``` r
-# transform previous items while iterating
-mutant <- octostep(cable, function(pre, cur, nxt) {
-  if (!any.null(pre, nxt)) sum(pre, cur, nxt) else cur
-}, pad=1L, use.names=TRUE, transform.previous=TRUE)
+    $a
+    [1] 23
 
-print(mutant)
-```
-
-    $m
+    $b
     [1] 0
 
-    $o
-    [1] 4
+------------------------------------------------------------------------
 
-    $n
-    [1] 9
+reduceList
+----------
 
-    $e
-    [1] 19
+``` r
+octostep::reduceList(x, func,  # x and func are required
+                     which.names=NULL, 
+                     from=c('left', 'right')[1],
+                     allow.ragged=FALSE, 
+                     warn=if (allow.ragged) TRUE else FALSE)
+```
 
-    $y
-    [1] 9
+-   `x` List of lists **required**
+-   `func` Function with arity `length(x)` **required**
+-   `which.names` Integer index of the list in `x` from which to copy names, default `NULL` indicates not to copy any names **optional**
+-   `from` Whether to reduce from left or right, defaults to `left`, alternative `right` **optional**
+-   `allow.ragged` Whether to allow input lists of unequal length, defaults to `FALSE` **optional**
+-   `warn` Logical indicating whether to signal a warning if the name vector specified by `which.names` does not have the same length as the longest list of `x` **optional**
+
+### Return
+
+List
+
+Examples
+--------
+
+``` r
+# new input
+listoflists <- list(list('A', 'B', 'C'), list(1L, 2L, 3L))
+
+# allows reducing from left ...
+octostep::reduceList(listoflists, function(a, b) {
+  paste0(a, as.character(b))
+}, from='left')
+```
+
+    [[1]]
+    [1] "A1"
+
+    [[2]]
+    [1] "B2"
+
+    [[3]]
+    [1] "C3"
+
+``` r
+# or from right ...
+octostep::reduceList(listoflists, function(a, b) {
+  paste0(a, as.character(b))
+}, from='right')
+```
+
+    [[1]]
+    [1] "C3"
+
+    [[2]]
+    [1] "B2"
+
+    [[3]]
+    [1] "A1"
+
+``` r
+# and even lists of unequal length
+octostep::reduceList(list(list(), list(1L)), function(a, b) {
+  if (is.null(a)) b else a
+}, allow.ragged=TRUE)
+```
+
+    [[1]]
+    [1] 1
