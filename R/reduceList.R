@@ -32,8 +32,8 @@ reduceList <- function(x, func,
                        from=c('left', 'right')[1],
                        allow.ragged=FALSE, 
                        warn=if (allow.ragged) TRUE else FALSE) {
-  stopifnot(is.list(x), length(x) > 1L, 
-            all(sapply(x, function(xx) length(xx) > 0L)), 
+  stopifnot(is.list(x),  # too strict: length(x) > 1L, 
+            all(sapply(x, function(xx) is.list(xx))), 
             is.function(func), length(formals(func)) == length(x),
             is.null(which.names) || which.names %in% 1L:length(x), 
             from %in% c('left', 'right'), 
@@ -43,10 +43,10 @@ reduceList <- function(x, func,
       !all(sapply(x, function(xx) length(xx) == length(x[[1]])))) {
     stop('Set allow.ragged to TRUE to iterate lists of unequal length')
   }
-  # preallocate return
-  y <- vector('list', maxl <- max(sapply(x, length)))
-  # naming
-  if (is.numeric(which.names)) {
+  # prep
+  y <- vector('list', maxl <- max(sapply(x, length)))  # preallocate return
+  if (length(y) == 0L) return(y)                       # early exit
+  if (is.numeric(which.names)) {                       # names
     names(y) <- names(x[[which.names]]) 
     if (warn && anyNA(names(y))) warning('Return value has missing names')
   }
@@ -61,9 +61,17 @@ reduceList <- function(x, func,
   # iterate
   repeat {
     # build argument list for current iteration/callback
-    z <- lapply(x, function(xx) if (i %in% 1L:length(xx)) xx[[i]])
+    z <- lapply(x, function(xx) {          # catch ragged indexing
+      tryCatch(if (i %in% 1L:length(xx)) xx[[i]], error=function(e) NULL)
+    })
     rtn <- do.call(func, z)                # do the call
-    if (!is.null(rtn)) y[[i]] <- rtn       # dabbing around
+    if (!is.null(rtn)) {                   # dabbing around
+      if (crem == 1L) {                    # from left
+        y[[i]] <- rtn
+      } else {                             # from right
+        y[[length(y) + 1L - i]] <- rtn
+      }
+    }
     i <- i + crem                          # crement
     if (i > maxl || i < 1L) break          # trapdoor
   }

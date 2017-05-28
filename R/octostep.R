@@ -5,11 +5,12 @@
 #' Besides a list \code{octostep} takes a function as input, 
 #' applies it to each element of the list and returns the resulting list.
 #' 
-#' @param x List, must conform to \code{length(x) >= 3L} \strong{required}.
+#' @param x List \strong{required}.
 #' @param func Function with \code{length(formals(func))} == 
 #' \code{2L * pad + 1L} \strong{required}.
 #' @param pad Integer controlling how many items should be padded \emph{around} 
-#' the current item, must be within \code{1L:((length(x) - 1L) / 2L)} 
+#' the current item, must be within \code{1L:((length(x) - 1L) / 2L)} for the 
+#' ordinary use case with \code{length(x) >= 2L * pad + 1L}, otherwise 1L 
 #' \strong{optional}.
 #' @param use.names If \code{x} has a \code{names} attribute, should it be 
 #' used for the return value? \strong{optional}.
@@ -23,10 +24,12 @@
 #' @export
 octostep <- function(x, func, 
                      pad=1L, use.names=TRUE, transform.previous=FALSE) {
-  stopifnot(pad >= 1L,  # length(x) >= 2L * pad + 1L 
+  stopifnot(pad >= 1L,                 # too strict: length(x) >= 2L * pad + 1L
             is.function(func), length(formals(func)) == 2L * pad + 1L)
-  y <- vector('list', length(x))  # preallocate return
-  if (use.names) names(y) <- names(x)
+  # prep
+  y <- vector('list', length(x))       # preallocate return
+  if (length(y) == 0L) return(y)       # early exit
+  if (use.names) names(y) <- names(x)  # names
   # iterate
   i <- 1L
   repeat {
