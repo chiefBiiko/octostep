@@ -40,5 +40,10 @@ testthat::test_that('callback is fed appropriately', {
                                         }
                                       }, transform.previous=TRUE),
                              list(1L, 6L, 13L, 22L, 5L))
-    
+  
+  # not recursive: slow above 10000
+  testthat::expect_identical(octostep(as.list(1L:5e4L), 
+                                      function(pre, cur, nxt) cur),
+                             as.list(1L:5e4L))
+  
 })

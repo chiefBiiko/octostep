@@ -1,6 +1,6 @@
-# reduceList
+# mergeLists
 
-#' Reduces multiple lists to a single list.
+#' Merges multiple lists into a single list.
 #' 
 #' @param x List of lists \strong{required}.
 #' @param func Function with arity \code{length(x)} \strong{required}.
@@ -27,7 +27,7 @@
 #' @seealso \code{\link{octostep}}
 #' 
 #' @export
-reduceList <- function(x, func, 
+mergeLists <- function(x, func, 
                        which.names=NULL, 
                        from=c('left', 'right')[1],
                        allow.ragged=FALSE, 

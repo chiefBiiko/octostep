@@ -19,7 +19,7 @@
 #' values of the initial input list \strong{optional}.
 #' @return List.
 #'
-#' @seealso \code{\link{reduceList}}
+#' @seealso \code{\link{mergeLists}}
 #'
 #' @export
 octostep <- function(x, func, 
