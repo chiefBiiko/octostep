@@ -27,8 +27,7 @@ octostep::octostep(x, func,  # x and func are required
 
 List
 
-Examples
---------
+### Examples
 
 ``` r
 # see arguments evolve
@@ -138,8 +137,7 @@ octostep::mergeLists(x, func,  # x and func are required
 
 List
 
-Examples
---------
+### Examples
 
 ``` r
 # new input
