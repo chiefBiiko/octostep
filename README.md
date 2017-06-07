@@ -1,11 +1,13 @@
 octostep
 ================
 
-Iterate or reduce lists getting a *window* argument list to your callback.
+[![Build Status](https://travis-ci.org/chiefBiiko/octostep.svg?branch=master)](https://travis-ci.org/chiefBiiko/octostep) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/chiefBiiko/octostep?branch=master&svg=true)](https://ci.appveyor.com/project/chiefBiiko/octostep)
+
+Iterate lists getting a *window* argument list to your callback.
 
 *[octostep](#octostep)*
 
-*[reduceList](#reducelist)*
+*[mergeLists](#mergelists)*
 
 octostep
 --------
@@ -114,11 +116,11 @@ print(transformer)
 
 ------------------------------------------------------------------------
 
-reduceList
+mergeLists
 ----------
 
 ``` r
-octostep::reduceList(x, func,  # x and func are required
+octostep::mergeLists(x, func,  # x and func are required
                      which.names=NULL, 
                      from=c('left', 'right')[1],
                      allow.ragged=FALSE, 
@@ -144,7 +146,7 @@ Examples
 listoflists <- list(list('A', 'B', 'C'), list(1L, 2L, 3L))
 
 # allows reducing from left ...
-octostep::reduceList(listoflists, function(a, b) {
+octostep::mergeLists(listoflists, function(a, b) {
   paste0(a, as.character(b))
 }, from='left')
 ```
@@ -160,7 +162,7 @@ octostep::reduceList(listoflists, function(a, b) {
 
 ``` r
 # or from right ...
-octostep::reduceList(listoflists, function(a, b) {
+octostep::mergeLists(listoflists, function(a, b) {
   paste0(a, as.character(b))
 }, from='right')
 ```
@@ -176,7 +178,7 @@ octostep::reduceList(listoflists, function(a, b) {
 
 ``` r
 # and even lists of unequal length
-octostep::reduceList(list(list(), list(1L)), function(a, b) {
+octostep::mergeLists(list(list(), list(1L)), function(a, b) {
   if (is.null(a)) b else a
 }, allow.ragged=TRUE)
 ```
